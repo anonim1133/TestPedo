@@ -1,0 +1,89 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0099cc"
+    tools:context=".FullscreenActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+
+	<!-- This FrameLayout insets its children based on system windows using
+		 android:fitsSystemWindows. -->
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:id="@+id/linlay">
+
+		<Space
+			android:layout_width="20px"
+			android:layout_height="150dp"
+			android:layout_gravity="center_horizontal|top"
+			/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="Krocz czas"
+			android:id="@+id/txtTime"
+			android:layout_gravity="center_horizontal"/>
+
+		<TextView
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textAppearance="?android:attr/textAppearanceLarge"
+		    android:text="Krocz"
+		    android:id="@+id/txtKrocz"
+		    android:layout_gravity="center"
+		    android:layout_column="6"/>
+
+		<Space
+			android:layout_width="20px"
+			android:layout_height="25px"
+			/>
+
+		<SeekBar
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/seekBar"
+			android:layout_gravity="center"
+			android:max="50"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:text="Krocz Pedo"
+			android:id="@+id/txtKroczPedo"
+			android:layout_gravity="center"
+			android:layout_column="5"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="Threshold"
+			android:id="@+id/txt_treshold"
+			android:layout_gravity="center_horizontal"/>
+
+		<Space
+			android:layout_width="20px"
+			android:layout_height="200px"
+			/>
+
+	</LinearLayout>
+
+	<Button
+		style="?metaButtonBarButtonStyle"
+		android:id="@+id/btn_reset"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Reset"
+		android:onClick="reset"
+		android:layout_gravity="center_horizontal|bottom"/>
+
+</FrameLayout>
