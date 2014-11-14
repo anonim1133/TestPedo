@@ -1,22 +1,18 @@
 package me.anonim1133.testpedo;
 
-import me.anonim1133.testpedo.util.SystemUiHider;
-
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
+
+import me.anonim1133.testpedo.util.SystemUiHider;
 
 
 
@@ -31,6 +27,7 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 	long lastTime = 0;
 	long numSteps = 0;
 	long numPSteps = 0;
+	short inactive_steps = 0;
 	double treshold = 0.0;
 
 	SensorManager sensorManager;
@@ -46,8 +43,6 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 
 	    SeekBar bar = (SeekBar) findViewById(R.id.seekBar);
 	    bar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-		    int progress = 0;
-
 		    @Override
 		    public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
 			    treshold = 10 + ((progresValue+0.1)/10);
@@ -127,8 +122,21 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 
 			long actualTime = System.currentTimeMillis();
 
-			if ((actualTime - lastTime) > 300 && v > treshold) { //11.91
-				numSteps++;
+			long difference = actualTime - lastTime;
+
+			if ((difference > 300) && (v > treshold)) { //11.91
+
+				if( (difference) > 5000 || (inactive_steps < 7 && inactive_steps != 0) || numSteps == 0) {
+					inactive_steps++;
+
+					if(inactive_steps >= 7){
+						inactive_steps = 0;
+						numSteps++;
+					}
+
+				}else{
+					numSteps++;
+				}
 				txtCounter.setText(Long.toString(numSteps));
 
 				txtTime.setText("Ostatni krok: " + (actualTime - lastTime));
