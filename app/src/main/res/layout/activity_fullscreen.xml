@@ -18,6 +18,14 @@
 		android:layout_height="fill_parent"
 		android:id="@+id/linlay">
 
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="Aktywność"
+			android:id="@+id/txtActivity"
+			android:layout_gravity="center_horizontal"/>
+
 		<Space
 			android:layout_width="20px"
 			android:layout_height="150dp"
@@ -40,6 +48,11 @@
 			android:id="@+id/txtStepTime"
 			android:layout_gravity="center_horizontal"/>
 
+		<Space
+			android:layout_width="match_parent"
+			android:layout_height="100px"
+			android:layout_gravity="center_horizontal"/>
+
 		<TextView
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
@@ -48,11 +61,6 @@
 		    android:id="@+id/txtKrocz"
 		    android:layout_gravity="center"
 		    android:layout_column="6"/>
-
-		<Space
-			android:layout_width="20px"
-			android:layout_height="25px"
-			/>
 
 		<SeekBar
 			android:layout_width="fill_parent"
@@ -69,6 +77,11 @@
 			android:id="@+id/txtKroczPedo"
 			android:layout_gravity="center"
 			android:layout_column="5"/>
+
+		<Space
+			android:layout_width="fill_parent"
+			android:layout_height="75px"
+			/>
 
 		<TextView
 			android:layout_width="wrap_content"

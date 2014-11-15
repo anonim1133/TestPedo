@@ -6,7 +6,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -31,9 +30,10 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 	double threshold = 11.91;
 
 	short time_between_steps = 300;
-	int activity = 0;
+	float activity = 0;
 
 	SensorManager sensorManager;
+	Average avg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +71,11 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 
 
 	    sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+	    avg = new Average((short)10);
 
 	    registerAcclerometer();
 	    registerPedometer();
-	    Log.d("pedo", "main");
+
     }
 
 
@@ -133,23 +134,40 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 					if(inactive_steps >= 7){
 						inactive_steps = 0;
 						numSteps++;
+
+
 					}
 
 				}else{
+					//zliczanie kroków
 					numSteps++;
+
+					//zliczanie "aktywności" podczas chodu
+					float average = avg.add((short)difference);
+					//1000f bo chcemy aby jeden krok trwał mniej niż 1s
+					if(average != 0 && average < 1000.0f){
+						float tmp = 1000.0f - (average/1000);
+						activity += tmp/1000;
+					}
 				}
 
 				//utrzymywanie zmiennej czasowej możliwie blisko częstotliwości kroków.
-				if((difference - time_between_steps) > 100 && time_between_steps < 1024)
+				//utrzymujemy zmienną w zakresie 256-1024
+				if((difference - time_between_steps) > 100 && time_between_steps < 1024){
+					//tempo spada
 					time_between_steps += 10;
-				else if((difference - time_between_steps) < 100 && time_between_steps > 256)
+				}else if((difference - time_between_steps) < 100 && time_between_steps > 256){
+					//temporosnie
 					time_between_steps -= 100;
+				}
 
 				//Wyświetlenie danych o krokach jak i zmiennych pomocniczych
+				TextView txtActivity = (TextView) findViewById(R.id.txtActivity);
 				TextView txtCounter = (TextView) findViewById(R.id.txtKrocz);
 				TextView txtTime = (TextView) findViewById(R.id.txtTime);
 				TextView txtStepTime = (TextView) findViewById(R.id.txtStepTime);
 
+				txtActivity.setText("Aktywność: " + activity);
 				txtCounter.setText(Long.toString(numSteps));
 				txtTime.setText("Ostatni krok: " + (actualTime - lastTime));
 				txtStepTime.setText("Interwał: " + time_between_steps);
@@ -191,5 +209,9 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 		numSteps = 0;
 		txtCounter = (TextView) findViewById(R.id.txtKrocz);
 		txtCounter.setText(Long.toString(numPSteps));
+
+		activity = 0;
+		TextView txtActivity = (TextView) findViewById(R.id.txtActivity);
+		txtActivity.setText("Aktywność: 0");
 	}
 }
