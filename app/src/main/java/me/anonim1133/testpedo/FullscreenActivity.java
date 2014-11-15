@@ -28,7 +28,10 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 	long numSteps = 0;
 	long numPSteps = 0;
 	short inactive_steps = 0;
-	double treshold = 0.0;
+	double threshold = 11.91;
+
+	short time_between_steps = 300;
+	int activity = 0;
 
 	SensorManager sensorManager;
 
@@ -42,13 +45,14 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 
 
 	    SeekBar bar = (SeekBar) findViewById(R.id.seekBar);
+	    bar.setProgress(19);
 	    bar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 		    @Override
 		    public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-			    treshold = 10 + ((progresValue+0.1)/10);
+			    threshold = 10 + ((progresValue+0.1)/10);
 
 			    TextView txt = (TextView) findViewById(R.id.txt_treshold);
-			    txt.setText("Threshold: " + Double.toString(treshold));
+			    txt.setText("Threshold: " + Double.toString(threshold));
 		    }
 
 		    @Override
@@ -116,16 +120,13 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 
 			v = Math.abs(v);
 
-			TextView txtCounter = (TextView) findViewById(R.id.txtKrocz);
-			TextView txtTime = (TextView) findViewById(R.id.txtTime);
-
-
 			long actualTime = System.currentTimeMillis();
-
 			long difference = actualTime - lastTime;
 
-			if ((difference > 300) && (v > treshold)) { //11.91
+			if ((difference > time_between_steps) && (v > threshold)) { //11.91 = best threshold
 
+				//Zabezpieczenie przed pierwszymi krokami ( pierwsze 7 kroków, takze po 5s nieaktywności )
+				//które mogą być ruchem telefonu chowanego do kieszeni.
 				if( (difference) > 5000 || (inactive_steps < 7 && inactive_steps != 0) || numSteps == 0) {
 					inactive_steps++;
 
@@ -137,9 +138,21 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 				}else{
 					numSteps++;
 				}
-				txtCounter.setText(Long.toString(numSteps));
 
+				//utrzymywanie zmiennej czasowej możliwie blisko częstotliwości kroków.
+				if((difference - time_between_steps) > 100 && time_between_steps < 1024)
+					time_between_steps += 10;
+				else if((difference - time_between_steps) < 100 && time_between_steps > 256)
+					time_between_steps -= 100;
+
+				//Wyświetlenie danych o krokach jak i zmiennych pomocniczych
+				TextView txtCounter = (TextView) findViewById(R.id.txtKrocz);
+				TextView txtTime = (TextView) findViewById(R.id.txtTime);
+				TextView txtStepTime = (TextView) findViewById(R.id.txtStepTime);
+
+				txtCounter.setText(Long.toString(numSteps));
 				txtTime.setText("Ostatni krok: " + (actualTime - lastTime));
+				txtStepTime.setText("Interwał: " + time_between_steps);
 
 				lastTime = System.currentTimeMillis();
 			}

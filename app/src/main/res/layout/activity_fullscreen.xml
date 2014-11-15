@@ -33,6 +33,14 @@
 			android:layout_gravity="center_horizontal"/>
 
 		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="Krocz ostatni czas"
+			android:id="@+id/txtStepTime"
+			android:layout_gravity="center_horizontal"/>
+
+		<TextView
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:textAppearance="?android:attr/textAppearanceLarge"
