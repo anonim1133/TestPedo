@@ -5,6 +5,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.SeekBar;
@@ -124,14 +126,17 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 			long actualTime = System.currentTimeMillis();
 			long difference = actualTime - lastTime;
 
-			if ((difference > time_between_steps) && (v > threshold)) { //11.91 = best threshold
+			if ((difference > time_between_steps) && (v > threshold)) {
+			//11.91 = chodzenie
+			//20.01 = skoki i przysiady
 
 				//Zabezpieczenie przed pierwszymi krokami ( pierwsze 7 kroków, takze po 5s nieaktywności )
 				//które mogą być ruchem telefonu chowanego do kieszeni.
-				if( (difference) > 5000 || (inactive_steps < 7 && inactive_steps != 0) || numSteps == 0) {
+
+				if( (difference) > 5000 || (inactive_steps < 5 && inactive_steps != 0) || numSteps == 0) {
 					inactive_steps++;
 
-					if(inactive_steps >= 7){
+					if(inactive_steps >= 5){
 						inactive_steps = 0;
 						numSteps++;
 
@@ -141,7 +146,8 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 				}else{
 					//zliczanie kroków
 					numSteps++;
-
+					ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+					toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 50);
 					//zliczanie "aktywności" podczas chodu
 					float average = avg.add((short)difference);
 					//1000f bo chcemy aby jeden krok trwał mniej niż 1s
