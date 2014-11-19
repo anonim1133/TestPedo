@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -146,8 +147,15 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 				}else{
 					//zliczanie kroków
 					numSteps++;
-					ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
-					toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 50);
+
+					try {
+						ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+						toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 50);
+						toneG.release();
+					}catch (Exception e){
+						Log.d("Map", "Exception: " + e.toString());
+					}
+
 					//zliczanie "aktywności" podczas chodu
 					float average = avg.add((short)difference);
 					//1000f bo chcemy aby jeden krok trwał mniej niż 1s
@@ -164,7 +172,7 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 					time_between_steps += 10;
 				}else if((difference - time_between_steps) < 100 && time_between_steps > 256){
 					//temporosnie
-					time_between_steps -= 100;
+					time_between_steps -= 20;
 				}
 
 				//Wyświetlenie danych o krokach jak i zmiennych pomocniczych
