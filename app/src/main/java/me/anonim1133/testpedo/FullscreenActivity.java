@@ -128,7 +128,7 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 			long difference = actualTime - lastTime;
 
 			if ((difference > time_between_steps) && (v > threshold)) {
-			//11.91 = chodzenie
+			//11.91 = chodzenie, przy ~16 wykrywa tylko krok nogi przy której jest telefon
 			//20.01 = skoki i przysiady
 
 				//Zabezpieczenie przed pierwszymi krokami ( pierwsze 7 kroków, takze po 5s nieaktywności )
@@ -170,9 +170,9 @@ public class FullscreenActivity extends Activity implements SensorEventListener{
 				if((difference - time_between_steps) > 100 && time_between_steps < 1024){
 					//tempo spada
 					time_between_steps += 10;
-				}else if((difference - time_between_steps) < 100 && time_between_steps > 256){
+				}else if((difference - time_between_steps) < 100 && time_between_steps > 356){
 					//temporosnie
-					time_between_steps -= 20;
+					time_between_steps -= 10;
 				}
 
 				//Wyświetlenie danych o krokach jak i zmiennych pomocniczych
