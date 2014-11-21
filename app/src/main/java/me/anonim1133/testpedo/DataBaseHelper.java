@@ -58,7 +58,7 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 	}
 
 	public boolean addWifi(String ssid, int signal, int security, double longitude, double latitude){
-		return wifi.addWifi(ssid, signal, security, longitude, latitude);
+		return wifi.add(ssid, signal, security, longitude, latitude);
 	}
 
 	public void sendWifi() {
