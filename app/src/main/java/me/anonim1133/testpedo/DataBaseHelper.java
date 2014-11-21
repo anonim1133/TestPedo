@@ -12,6 +12,10 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 	private static String DATABASE_NAME = "zacja";
 	private static final int DATABASE_VERSION = 1;
 
+	private Context c;
+	private SQLiteDatabase db;
+	private DBWifi wifi;
+
 	private static String DATABASE_CREATE = "BEGIN TRANSACTION;\n" +
 			"CREATE TABLE `wifi` (\n" +
 			"\t`id`\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
@@ -33,9 +37,6 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 			"CREATE INDEX `date_index` ON `conquered` (`date` DESC);\n" +
 			"COMMIT;\n";
 
-	private Context c;
-	private SQLiteDatabase db;
-
 	public DataBaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		this.c = context;
@@ -44,7 +45,6 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		database.execSQL(DATABASE_CREATE);
-
 	}
 
 	@Override
@@ -54,8 +54,16 @@ public class DataBaseHelper extends SQLiteOpenHelper{
 
 	public void open() throws SQLException {
 		db = getWritableDatabase();
+
 	}
 
+	public boolean addWifi(String ssid, int signal, int security, double longitude, double latitude){
+		return wifi.addWifi(ssid, signal, security, longitude, latitude);
+	}
+
+	public void sendWifi() {
+		wifi.send();
+	}
 }
 
 
